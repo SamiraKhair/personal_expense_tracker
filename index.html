@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal Expense Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="m-0 bg-[#f4f6fb] font-sans text-gray-800">
+
+  <header class="bg-blue-600 px-4 py-4 text-white sm:px-6 sm:py-5">
+    <h1 class="m-0 text-xl font-bold sm:text-2xl">Personal Expense Tracker</h1>
+  </header>
+
+  <main class="mx-auto grid max-w-[900px] gap-6 p-4 sm:p-5 lg:p-6">
+
+    <section class="grid grid-cols-1 gap-4 sm:grid-cols-3" aria-label="Dashboard">
+      <div class="rounded-[10px] border border-gray-200 bg-white p-5 sm:p-3.5 lg:p-5">
+        <span class="mb-1.5 block text-sm text-gray-500">Total Income</span>
+        <strong id="total-income" class="text-2xl font-bold text-green-600 break-words md:text-xl lg:text-2xl">$0.00</strong>
+      </div>
+      <div class="rounded-[10px] border border-gray-200 bg-white p-5 sm:p-3.5 lg:p-5">
+        <span class="mb-1.5 block text-sm text-gray-500">Total Expenses</span>
+        <strong id="total-expenses" class="text-2xl font-bold text-red-600 break-words md:text-xl lg:text-2xl">$0.00</strong>
+      </div>
+      <div class="rounded-[10px] border border-gray-200 bg-white p-5 sm:p-3.5 lg:p-5">
+        <span class="mb-1.5 block text-sm text-gray-500">Current Balance</span>
+        <strong id="balance" class="text-2xl font-bold break-words md:text-xl lg:text-2xl">$0.00</strong>
+      </div>
+    </section>
+
+    <section class="rounded-[10px] border border-gray-200 bg-white p-4 sm:p-5">
+      <h2 class="mb-4 mt-0 text-xl font-semibold">Add Transaction</h2>
+      <form id="transaction-form" novalidate class="grid grid-cols-1 items-start gap-x-4 gap-y-3.5 sm:grid-cols-2 lg:grid-cols-3">
+
+        <div class="flex flex-col gap-1">
+          <label for="title" class="text-sm font-medium text-gray-500">Transaction Title <span class="text-red-600">*</span></label>
+          <input type="text" id="title" maxlength="80" placeholder="e.g. Grocery run" autocomplete="off" aria-describedby="err-title"
+            class="w-full rounded-md border border-gray-200 bg-white px-2.5 py-2 text-base text-gray-800 focus:outline focus:outline-2 focus:outline-blue-600 aria-[invalid=true]:border-red-600 aria-[invalid=true]:bg-red-50">
+          <small id="err-title" class="min-h-[1.1em] text-xs text-red-600"></small>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label for="amount" class="text-sm font-medium text-gray-500">Amount <span class="text-red-600">*</span></label>
+          <input type="text" id="amount" inputmode="decimal" placeholder="0.00" autocomplete="off" aria-describedby="err-amount"
+            class="w-full rounded-md border border-gray-200 bg-white px-2.5 py-2 text-base text-gray-800 focus:outline focus:outline-2 focus:outline-blue-600 aria-[invalid=true]:border-red-600 aria-[invalid=true]:bg-red-50">
+          <small id="err-amount" class="min-h-[1.1em] text-xs text-red-600"></small>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label for="type" class="text-sm font-medium text-gray-500">Transaction Type <span class="text-red-600">*</span></label>
+          <select id="type" aria-describedby="err-type"
+            class="w-full rounded-md border border-gray-200 bg-white px-2.5 py-2 text-base text-gray-800 focus:outline focus:outline-2 focus:outline-blue-600 aria-[invalid=true]:border-red-600 aria-[invalid=true]:bg-red-50">
+            <option value="">Choose type</option>
+            <option value="expense">Expense</option>
+            <option value="income">Income</option>
+          </select>
+          <small id="err-type" class="min-h-[1.1em] text-xs text-red-600"></small>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label for="category" class="text-sm font-medium text-gray-500">Category <span class="text-red-600">*</span></label>
+          <select id="category" aria-describedby="err-category"
+            class="w-full rounded-md border border-gray-200 bg-white px-2.5 py-2 text-base text-gray-800 focus:outline focus:outline-2 focus:outline-blue-600 aria-[invalid=true]:border-red-600 aria-[invalid=true]:bg-red-50">
+            <option value="">Choose category</option>
+            <option value="Food">Food</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Transport">Transport</option>
+            <option value="Bills">Bills</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Salary">Salary</option>
+            <option value="Other">Other</option>
+          </select>
+          <small id="err-category" class="min-h-[1.1em] text-xs text-red-600"></small>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label for="date" class="text-sm font-medium text-gray-500">Date <span class="text-red-600">*</span></label>
+          <input type="date" id="date" aria-describedby="err-date"
+            class="w-full rounded-md border border-gray-200 bg-white px-2.5 py-2 text-base text-gray-800 focus:outline focus:outline-2 focus:outline-blue-600 aria-[invalid=true]:border-red-600 aria-[invalid=true]:bg-red-50">
+          <small id="err-date" class="min-h-[1.1em] text-xs text-red-600"></small>
+        </div>
+
+        <div class="col-span-full flex flex-wrap items-center gap-4">
+          <button type="submit"
+            class="rounded-md bg-blue-600 px-5 py-2.5 text-base font-medium text-white hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Add Transaction</button>
+          <p id="form-success" role="status" hidden
+            class="rounded-md border border-green-200 bg-green-100 px-3.5 py-2 text-base text-green-800"></p>
+        </div>
+      </form>
+    </section>
+
+    <section class="rounded-[10px] border border-gray-200 bg-white p-4 sm:p-5">
+      <div class="mb-3 flex flex-wrap items-center justify-between gap-3">
+        <h2 class="m-0 text-xl font-semibold">Transaction History</h2>
+        <div class="inline-flex w-full overflow-hidden rounded-lg border border-gray-200 sm:w-auto" role="group" aria-label="Filter transactions">
+          <button type="button" class="filter-btn flex-1 bg-blue-600 px-3 py-1.5 text-sm text-white sm:flex-none" data-filter="all">All Transactions</button>
+          <button type="button" class="filter-btn flex-1 border-l border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 sm:flex-none" data-filter="income">Income</button>
+          <button type="button" class="filter-btn flex-1 border-l border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 sm:flex-none" data-filter="expense">Expenses</button>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr>
+              <th class="whitespace-nowrap border-b border-gray-200 px-2 py-2.5 text-left text-xs font-semibold uppercase tracking-wide text-gray-500 sm:px-2.5 sm:text-sm">Title</th>
+              <th class="whitespace-nowrap border-b border-gray-200 px-2 py-2.5 text-right text-xs font-semibold uppercase tracking-wide text-gray-500 sm:px-2.5 sm:text-sm">Amount</th>
+              <th class="whitespace-nowrap border-b border-gray-200 px-2 py-2.5 text-left text-xs font-semibold uppercase tracking-wide text-gray-500 sm:px-2.5 sm:text-sm">Category</th>
+              <th class="whitespace-nowrap border-b border-gray-200 px-2 py-2.5 text-left text-xs font-semibold uppercase tracking-wide text-gray-500 sm:px-2.5 sm:text-sm">Type</th>
+              <th class="whitespace-nowrap border-b border-gray-200 px-2 py-2.5 text-left text-xs font-semibold uppercase tracking-wide text-gray-500 sm:px-2.5 sm:text-sm">Date</th>
+              <th class="border-b border-gray-200 px-2 py-2.5"><span class="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody id="transaction-rows"></tbody>
+        </table>
+      </div>
+
+      <div id="empty-msg" class="mt-2 rounded-lg border border-dashed border-gray-200 px-4 py-8 text-center text-gray-500" hidden></div>
+    </section>
+
+  </main>
+
+  <script>
+    const STORAGE_KEY = "expense-tracker-transactions";
+    const CATEGORIES = ["Food", "Shopping", "Transport", "Bills", "Entertainment", "Salary", "Other"];
+    const TYPES = ["income", "expense"];
+    const AMOUNT_PATTERN = /^\d{1,9}(\.\d{1,2})?$/;
+    const MIN_YEAR = 1970;
+
+    const FILTER_ACTIVE = ["bg-blue-600", "text-white"];
+    const FILTER_INACTIVE = ["bg-white", "text-gray-500", "hover:text-gray-800"];
+    const TD_BASE = "whitespace-nowrap border-b border-gray-200 px-2 py-2.5 text-sm sm:px-2.5 md:text-base";
+    const DELETE_BTN = "rounded-md border border-gray-200 bg-transparent px-2.5 py-1 text-sm text-gray-500 hover:border-red-600 hover:text-red-600 sm:px-2.5 max-sm:px-1.5";
+    const BADGE_BASE = "inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold";
+    const BADGE_CLASSES = {
+      income: `${BADGE_BASE} bg-green-100 text-green-600`,
+      expense: `${BADGE_BASE} bg-red-100 text-red-600`
+    };
+    const AMOUNT_CLASSES = {
+      income: "text-right font-semibold text-green-600",
+      expense: "text-right font-semibold text-red-600"
+    };
+
+    const currency = new Intl.NumberFormat("en-BD", { style: "currency", currency: "BDT" });
+
+    const form = document.getElementById("transaction-form");
+    const rowsEl = document.getElementById("transaction-rows");
+    const emptyMsg = document.getElementById("empty-msg");
+    const successEl = document.getElementById("form-success");
+    const fieldIds = ["title", "amount", "type", "category", "date"];
+
+    let transactions = loadTransactions();
+    let currentFilter = "all";
+    let hasSubmitted = false;
+    let successTimer = null;
+
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        currentFilter = btn.dataset.filter;
+        document.querySelectorAll(".filter-btn").forEach(b => {
+          const active = b === btn;
+          b.classList.remove(...(active ? FILTER_INACTIVE : FILTER_ACTIVE));
+          b.classList.add(...(active ? FILTER_ACTIVE : FILTER_INACTIVE));
+        });
+        renderList();
+      });
+    });
+
+    function loadTransactions() {
+      try {
+        const data = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        return Array.isArray(data) ? data : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveTransactions() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
+    }
+
+    function addTransaction(data) {
+      transactions.push({
+        id: Date.now().toString(36) + Math.random().toString(36).slice(2, 8),
+        title: data.title,
+        amount: data.amount,
+        type: data.type,
+        category: data.category,
+        date: data.date
+      });
+      saveTransactions();
+      render();
+    }
+
+    function deleteTransaction(id) {
+      transactions = transactions.filter(t => t.id !== id);
+      saveTransactions();
+      render();
+    }
+
+    function render() {
+      const totalIncome = sumByType("income");
+      const totalExpenses = sumByType("expense");
+      const balance = totalIncome - totalExpenses;
+
+      document.getElementById("total-income").textContent = currency.format(totalIncome);
+      document.getElementById("total-expenses").textContent = currency.format(totalExpenses);
+      document.getElementById("balance").textContent = currency.format(balance);
+
+      renderList();
+    }
+
+    function sumByType(type) {
+      return transactions
+        .filter(t => t.type === type)
+        .reduce((sum, t) => sum + t.amount, 0);
+    }
+
+    function renderList() {
+      rowsEl.innerHTML = "";
+
+      const visible = currentFilter === "all"
+        ? transactions
+        : transactions.filter(t => t.type === currentFilter);
+
+      renderEmptyState(visible.length === 0);
+
+      const sorted = [...visible].sort((a, b) => b.date.localeCompare(a.date));
+
+      for (const t of sorted) {
+        const tr = document.createElement("tr");
+
+        const titleTd = cell(t.title, `${TD_BASE} whitespace-normal font-semibold`);
+
+        const amountTd = cell(
+          `${t.type === "income" ? "+" : "−"}${currency.format(t.amount)}`,
+          `${TD_BASE} ${AMOUNT_CLASSES[t.type]}`
+        );
+
+        const categoryTd = cell(t.category, TD_BASE);
+
+        const typeTd = document.createElement("td");
+        typeTd.className = TD_BASE;
+        const badge = document.createElement("span");
+        badge.className = BADGE_CLASSES[t.type];
+        badge.textContent = t.type === "income" ? "Income" : "Expense";
+        typeTd.appendChild(badge);
+
+        const dateTd = cell(t.date, TD_BASE);
+
+        const actionTd = document.createElement("td");
+        actionTd.className = "border-b border-gray-200 px-2 py-2.5";
+        const del = document.createElement("button");
+        del.className = DELETE_BTN;
+        del.type = "button";
+        del.textContent = "Delete";
+        del.setAttribute("aria-label", `Delete ${t.title}`);
+        del.addEventListener("click", () => deleteTransaction(t.id));
+        actionTd.appendChild(del);
+
+        tr.append(titleTd, amountTd, categoryTd, typeTd, dateTd, actionTd);
+        rowsEl.appendChild(tr);
+      }
+    }
+
+    function renderEmptyState(isEmpty) {
+      emptyMsg.hidden = !isEmpty;
+      if (!isEmpty) return;
+
+      emptyMsg.textContent = "";
+      const heading = document.createElement("strong");
+      heading.className = "mb-1 block font-semibold text-gray-800";
+      const hint = document.createElement("span");
+
+      if (transactions.length === 0) {
+        heading.textContent = "No transactions yet";
+        hint.textContent = "Add your first income or expense using the form above.";
+      } else {
+        heading.textContent = "No transactions match this filter";
+        hint.textContent = "Try another filter to see more transactions.";
+      }
+      emptyMsg.append(heading, hint);
+    }
+
+    function cell(text, className) {
+      const td = document.createElement("td");
+      td.className = className;
+      td.textContent = text;
+      return td;
+    }
+
+    function todayISO() {
+      const now = new Date();
+      const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+      return local.toISOString().slice(0, 10);
+    }
+
+    function isValidDateString(value) {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+      const [year, month, day] = value.split("-").map(Number);
+      if (year < MIN_YEAR || month < 1 || month > 12) return false;
+      const d = new Date(Date.UTC(year, month - 1, day));
+      return d.getUTCFullYear() === year && d.getUTCMonth() === month - 1 && d.getUTCDate() === day;
+    }
+
+    function validateForm() {
+      const values = {
+        title: document.getElementById("title").value.trim(),
+        amount: document.getElementById("amount").value.trim(),
+        type: document.getElementById("type").value,
+        category: document.getElementById("category").value,
+        date: document.getElementById("date").value
+      };
+
+      const errors = {};
+
+      if (!values.title) {
+        errors.title = "Please enter a title.";
+      }
+
+      if (!values.amount) {
+        errors.amount = "Please enter an amount.";
+      } else if (!AMOUNT_PATTERN.test(values.amount)) {
+        errors.amount = "Use numbers only, with up to 2 decimal places.";
+      } else if (Number(values.amount) <= 0) {
+        errors.amount = "Amount must be greater than 0.";
+      }
+
+      if (!TYPES.includes(values.type)) {
+        errors.type = "Please choose income or expense.";
+      }
+
+      if (!CATEGORIES.includes(values.category)) {
+        errors.category = "Please choose a category.";
+      }
+
+      if (!values.date) {
+        errors.date = "Please choose a date.";
+      } else if (!isValidDateString(values.date)) {
+        errors.date = "Please enter a valid date.";
+      } else if (values.date > todayISO()) {
+        errors.date = "The date cannot be in the future.";
+      }
+
+      return { values, errors };
+    }
+
+    function showErrors(errors) {
+      for (const id of fieldIds) {
+        const input = document.getElementById(id);
+        const errorEl = document.getElementById(`err-${id}`);
+        const message = errors[id] || "";
+        errorEl.textContent = message;
+        input.setAttribute("aria-invalid", message ? "true" : "false");
+      }
+    }
+
+    function showSuccess(message) {
+      successEl.textContent = message;
+      successEl.hidden = false;
+      clearTimeout(successTimer);
+      successTimer = setTimeout(() => { successEl.hidden = true; }, 3000);
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      hasSubmitted = true;
+
+      const { values, errors } = validateForm();
+      showErrors(errors);
+
+      const firstInvalid = fieldIds.find(id => errors[id]);
+      if (firstInvalid) {
+        document.getElementById(firstInvalid).focus();
+        return;
+      }
+
+      addTransaction({
+        title: values.title,
+        amount: Math.round(Number(values.amount) * 100) / 100,
+        type: values.type,
+        category: values.category,
+        date: values.date
+      });
+
+      resetForm();
+      showSuccess("Transaction added successfully.");
+      document.getElementById("title").focus();
+    });
+
+    fieldIds.forEach(id => {
+      const el = document.getElementById(id);
+      const evt = el.tagName === "SELECT" ? "change" : "input";
+      el.addEventListener(evt, () => {
+        if (hasSubmitted) showErrors(validateForm().errors);
+      });
+    });
+
+    function resetForm() {
+      form.reset();
+      hasSubmitted = false;
+      showErrors({});
+      setDefaults();
+    }
+
+    function setDefaults() {
+      const today = todayISO();
+      const dateEl = document.getElementById("date");
+      dateEl.value = today;
+      dateEl.max = today;
+    }
+
+    setDefaults();
+    render();
+  </script>
+</body>
+</html>
